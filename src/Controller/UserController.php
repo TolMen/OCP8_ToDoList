@@ -27,19 +27,20 @@ class UserController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user, ['is_creation' => true]); // Passer is_creation à true
+        $form = $this->createForm(UserType::class, $user, ['is_creation' => true]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Hash du mot de passe
             $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
             $user->setPassword($hashedPassword);
 
+            // Persist et flush
             $em->persist($user);
             $em->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
-
             return $this->redirectToRoute('user_list');
         }
 
@@ -51,21 +52,21 @@ class UserController extends AbstractController
     #[Route('/users/{id}/edit', name: 'user_edit')]
     public function edit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $form = $this->createForm(UserType::class, $user); // Ne passe pas is_creation ici
+        $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // On ne modifie le mot de passe que s'il a été saisi
+            // On ne modifie le mot de passe que s'il a été changé
             if ($form->get('plainPassword')->getData()) {
                 $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
                 $user->setPassword($hashedPassword);
             }
 
+            // Mise à jour et flush
             $em->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié.");
-
             return $this->redirectToRoute('user_list');
         }
 
