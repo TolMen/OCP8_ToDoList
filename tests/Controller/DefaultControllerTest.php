@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Tests\Controller; // Utilise le bon namespace
+// tests/Controller/DefaultControllerTest.php
+
+namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testIndex(): void
     {
         $client = static::createClient();
-
-        // Requête GET vers la route racine
         $crawler = $client->request('GET', '/');
 
-        // Vérifie que la réponse a un code de statut 200
-        $this->assertResponseIsSuccessful(); // Méthode plus propre que assertEquals(200, ...)
-
-        // Vérifie que le texte "Welcome to Symfony" est présent dans l'H1
-        $this->assertSelectorTextContains('h1', 'Welcome to Symfony');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
     }
+
 }
+
