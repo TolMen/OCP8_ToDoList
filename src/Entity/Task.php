@@ -29,6 +29,24 @@ class Task
     #[ORM\Column(type: 'boolean')]
     private bool $isDone;
 
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"])]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    private ?User $author = null;
+
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+    
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();

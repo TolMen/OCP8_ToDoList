@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,31 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer l'utilisateur actuel ou assigner "Anonyme"
+            $user = $this->getUser();
+            if ($user) {
+                $task->setAuthor($user);
+            } else {
+                // Rechercher si l'utilisateur "Anonyme" existe déjà
+                $anonymousUser = $em->getRepository(User::class)->findOneBy(['username' => 'Anonyme']);
+
+                // Si l'utilisateur n'existe pas, le créer
+                if (!$anonymousUser) {
+                    $anonymousUser = new User();
+                    $anonymousUser->setUsername('Anonyme');
+                    $anonymousUser->setEmail('anonyme@example.com');
+                    $anonymousUser->setPassword(''); // Pas de mot de passe pour un utilisateur anonyme
+
+                    // Persister l'utilisateur "Anonyme"
+                    $em->persist($anonymousUser);
+                    $em->flush(); // On flush immédiatement pour s'assurer qu'il est bien dans la base de données
+                }
+
+                // Assigner cet utilisateur anonyme à la tâche
+                $task->setAuthor($anonymousUser);
+            }
+
+            // Persister la tâche
             $em->persist($task);
             $em->flush();
 

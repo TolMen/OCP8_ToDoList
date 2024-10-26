@@ -8,8 +8,8 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-6 offset-md-3"> <!-- Centrer le formulaire -->
-            {{ form_start(form, {'action' : path('user_create'), 'attr': {'class': 'form'}}) }}
+        <div class="col-md-6 offset-md-3">
+            {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <button type="submit" class="btn btn-success">Ajouter</button>
             {{ form_end(form) }}
