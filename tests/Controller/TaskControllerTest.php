@@ -6,6 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Entity\Task;
 
 // Classe de test pour le contrôleur des tâches
+/**
+ * Teste la classe TaskController.
+ *
+ * Cette classe contient des tests pour s'assurer que les méthodes du contrôleur des tâches 
+ * fonctionnent comme prévu. Les tests incluent la création, l'édition, l'affichage, 
+ * le basculement et la suppression de tâches par des utilisateurs authentifiés et non authentifiés.
+ */
 class TaskControllerTest extends WebTestCase
 {
     private $client; // Client de test pour simuler les requêtes HTTP
@@ -37,8 +44,8 @@ class TaskControllerTest extends WebTestCase
 
         // Création d'une nouvelle tâche
         $task = new Task();
-        $task->setTitle('Tâche de test');
-        $task->setContent('Contenu de la tâche de test');
+        $task->setTitle('Tâche de test'); // Définir le titre de la tâche
+        $task->setContent('Contenu de la tâche de test'); // Définir le contenu de la tâche
 
         // Persistance de la tâche dans la base de données
         $entityManager->persist($task);
@@ -65,10 +72,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertNotNull($form, 'Le formulaire de création de tâche n\'a pas été trouvé.'); // Vérifie la présence du formulaire
 
         // Remplissage du formulaire avec des données de test
-        $form['task[title]'] = 'Nouvelle tâche';
-        $form['task[content]'] = 'Contenu de la tâche';
+        $form['task[title]'] = 'Nouvelle tâche'; // Titre de la nouvelle tâche
+        $form['task[content]'] = 'Contenu de la tâche'; // Contenu de la nouvelle tâche
         $this->client->submit($form); // Soumission du formulaire
-        $this->assertResponseRedirects('/tasks'); // Vérifie la redirection
+        $this->assertResponseRedirects('/tasks'); // Vérifie la redirection vers la liste des tâches
     }
 
     /**
@@ -92,8 +99,8 @@ class TaskControllerTest extends WebTestCase
         $this->assertNotNull($form, 'Le formulaire d\'édition de tâche n\'a pas été trouvé.'); // Vérifie la présence du formulaire
 
         // Remplir le formulaire avec de nouvelles valeurs
-        $form['task[title]'] = 'Tâche modifiée';
-        $form['task[content]'] = 'Contenu de la tâche modifiée';
+        $form['task[title]'] = 'Tâche modifiée'; // Nouveau titre de la tâche
+        $form['task[content]'] = 'Contenu de la tâche modifiée'; // Nouveau contenu de la tâche
         $this->client->submit($form); // Soumission du formulaire
 
         // Vérifiez que la redirection se fait vers la page des tâches
@@ -144,8 +151,8 @@ class TaskControllerTest extends WebTestCase
         $this->assertNotNull($form, 'Le formulaire de création de tâche n\'a pas été trouvé.'); // Vérifie la présence du formulaire
 
         // Remplir le formulaire
-        $form['task[title]'] = 'Tâche test';
-        $form['task[content]'] = 'Contenu de la tâche test';
+        $form['task[title]'] = 'Tâche test'; // Titre de la tâche test
+        $form['task[content]'] = 'Contenu de la tâche test'; // Contenu de la tâche test
 
         // Soumettez le formulaire
         $this->client->submit($form);
