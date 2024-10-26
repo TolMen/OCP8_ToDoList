@@ -24,6 +24,7 @@
                             {% endif %}
                         </h5>
                         <p class="card-text">{{ task.content }}</p>
+                        <p class="card-text">Auteur : {{ task.author ? task.author.username : 'Anonyme' }}</p>
                         <div class="d-flex justify-content-between">
                             <form action="{{ path('task_toggle', {'id' : task.id }) }}" method="post">
                                 <button class="btn btn-success btn-sm">
