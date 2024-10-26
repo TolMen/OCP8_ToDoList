@@ -4,7 +4,12 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-// Classe de test pour le contrôleur par défaut
+/**
+ * Teste le contrôleur par défaut de l'application.
+ *
+ * Cette classe contient des tests pour vérifier que la page d'accueil de 
+ * l'application fonctionne correctement et affiche le contenu attendu.
+ */
 class DefaultControllerTest extends WebTestCase
 {
     /**
@@ -28,8 +33,8 @@ class DefaultControllerTest extends WebTestCase
 
         // Vérification que le texte spécifique est présent dans la balise <h1> de la réponse HTML
         $this->assertSelectorTextContains(
-            'h1',
-            'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !'
+            'h1', // Sélecteur pour la balise <h1>
+            'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !' // Texte attendu
         );
     }
 }

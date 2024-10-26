@@ -6,7 +6,14 @@ use App\Entity\Task;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
-// Classe de test pour l'entité Task
+/**
+ * Teste la classe Task.
+ *
+ * Cette classe contient des tests pour s'assurer que les méthodes de la classe Task 
+ * fonctionnent comme prévu. Les tests incluent l'attribution d'un auteur à une tâche, 
+ * le comportement d'un auteur anonyme et la fonctionnalité de marquer une tâche comme 
+ * terminée ou non.
+ */
 class TaskTest extends TestCase
 {
     /**

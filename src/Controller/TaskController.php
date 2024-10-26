@@ -105,10 +105,14 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTask(Task $task, EntityManagerInterface $em): Response
     {
-        $em->remove($task);
-        $em->flush();
-
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        // Vérifiez que l'utilisateur connecté est l'auteur de la tâche ou a un rôle ADMIN
+        if ($task->getAuthor() === $this->getUser() || $this->isGranted('ROLE_ADMIN')) {
+            $em->remove($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        } else {
+            $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour supprimer cette tâche.');
+        }
 
         return $this->redirectToRoute('task_list');
     }
