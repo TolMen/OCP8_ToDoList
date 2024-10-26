@@ -9,7 +9,7 @@
         <h1>Liste des Tâches</h1>
         <a href="{{ path('task_create') }}" class="btn btn-info">Créer une tâche</a>
     </div>
-    
+
     <div class="row">
         {% for task in tasks %}
             <div class="col-sm-4 col-lg-4 col-md-4 mb-4">
@@ -31,9 +31,21 @@
                                     {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
                                 </button>
                             </form>
-                            <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
-                                <button class="btn btn-danger btn-sm">Supprimer</button>
-                            </form>
+                            {% if app.user %}
+                                {% if task.author is null or task.author.username == 'Anonyme' %}
+                                    {# Si l'auteur est anonyme #}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
+                                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                {% elseif task.author.id == app.user.id %}
+                                    {# L'utilisateur connecté est l'auteur de la tâche #}
+                                    <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
+                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
