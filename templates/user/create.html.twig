@@ -1,18 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block header_title %}
-    <h1>Créer un utilisateur</h1>
-{% endblock %}
-
-{% block header_img %}{% endblock %}
+{% block title %}Inscription - To Do List{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <button type="submit" class="btn btn-success">Ajouter</button>
-            {{ form_end(form) }}
+<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+    <div class="col-md-4">
+
+        {# Affichage des erreurs éventuelles #}
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <h1 class="h3 mb-3 font-weight-normal text-center">Inscription</h1>
+
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_row(form.username) }}
         </div>
+        <div class="mb-3">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.plainPassword.first) }} 
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.plainPassword.second) }} 
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.roles) }} 
+        </div>
+
+        
+        <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+
+        {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
