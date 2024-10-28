@@ -1,0 +1,22 @@
+/* Style pour l'image de fond */
+.homepage-background {
+    background-image: url("../img/imgHome.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding-left: 50px;
+    color: #000000;
+}
+
+.homepage-content {
+    max-width: 600px;
+    text-align: left;
+}
+
+
+#user_roles_0 {
+    margin-right: 10px;
+}

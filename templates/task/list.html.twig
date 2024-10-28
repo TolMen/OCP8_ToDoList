@@ -1,60 +1,109 @@
 {% extends 'base.html.twig' %}
 
-{% block header_img %}
-    <img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">
-{% endblock %}
+{% block title %}Liste des tâches - To Do List{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Liste des Tâches</h1>
-        <a href="{{ path('task_create') }}" class="btn btn-info">Créer une tâche</a>
+    <div class="text-center mt-4">
+        <h1>Liste des tâches</h1>
+        <a href="{{ path('task_create') }}" class="btn btn-secondary mt-3">
+            <i class="fas fa-plus"></i> Créer une tâche
+        </a>
     </div>
 
-    <div class="row">
-        {% for task in tasks %}
-            <div class="col-sm-4 col-lg-4 col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-between align-items-center">
-                            {{ task.title }}
-                            {% if task.isDone %}
-                                <span class="text-success"><strong>&#10003;</strong></span>
-                            {% else %}
-                                <span class="text-danger"><strong>&#10007;</strong></span>
-                            {% endif %}
-                        </h5>
-                        <p class="card-text">{{ task.content }}</p>
-                        <p class="card-text">Auteur : {{ task.author ? task.author.username : 'Anonyme' }}</p>
-                        <div class="d-flex justify-content-between">
-                            <form action="{{ path('task_toggle', {'id' : task.id }) }}" method="post">
-                                <button class="btn btn-success btn-sm">
-                                    {% if not task.isDone %}Marquer comme faite{% else %}Marquer non terminée{% endif %}
-                                </button>
-                            </form>
-                            {% if app.user %}
-                                {% if task.author is null or task.author.username == 'Anonyme' %}
-                                    {# Si l'auteur est anonyme #}
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
-                                            <button class="btn btn-danger btn-sm">Supprimer</button>
-                                        </form>
+    <div class="container mb-5 mt-5">
+        <div class="row">
+            {% for task in tasks %}
+                <div class="col-12 col-md-3 mb-4 d-flex justify-content-center"> <!-- Modifié pour 4 cartes par ligne -->
+                    <div class="card shadow-sm w-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                    <p class="card-text"><small>Auteur : {{ task.author ? task.author.username : 'Anonyme' }}</small></p>
+                                </div>
+                                <div>
+                                    {% if task.isDone %}
+                                        <span class="text-success" style="font-size: 1.5em;">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                    {% else %}
+                                        <span class="text-danger" style="font-size: 1.5em;">
+                                            <i class="fas fa-times-circle"></i>
+                                        </span>
                                     {% endif %}
-                                {% elseif task.author.id == app.user.id %}
-                                    {# L'utilisateur connecté est l'auteur de la tâche #}
-                                    <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post">
-                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <a href="#" class="btn btn-primary" style="color: white;" data-bs-toggle="modal" data-bs-target="#modal{{ task.id }}">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </a> <!-- Lien vers la modale -->
+                                <div class="d-flex align-items-center">
+                                    <form action="{{ path('task_toggle', {'id' : task.id }) }}" method="post" class="flex-grow-1 me-2"> <!-- Ajout de la marge à droite -->
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton{{ task.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                {% if task.isDone %}Terminé{% else %}En cours{% endif %}
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ task.id }}">
+                                                <li>
+                                                    <button type="submit" name="status" value="done" class="dropdown-item">Terminé</button>
+                                                </li>
+                                                <li>
+                                                    <button type="submit" name="status" value="in_progress" class="dropdown-item">En cours</button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </form>
-                                {% endif %}
-                            {% endif %}
+                                    {% if app.user %}
+                                        {% if task.author is null or task.author.username == 'Anonyme' %}
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post" class="ms-2"> <!-- Ajout d'une marge pour espacer le bouton -->
+                                                    <button class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        {% elseif task.author.id == app.user.id %}
+                                            <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post" class="ms-2"> <!-- Ajout d'une marge pour espacer le bouton -->
+                                                <button class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="alert alert-warning" role="alert">
-                Il n'y a pas encore de tâche enregistrée. 
-                <a href="{{ path('task_create') }}" class="btn btn-warning">Créer une tâche</a>
-            </div>
-        {% endfor %}
+
+                <!-- Fenêtre modale pour afficher le contenu de la tâche -->
+                <div class="modal fade" id="modal{{ task.id }}" tabindex="-1" aria-labelledby="modalLabel{{ task.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered"> <!-- Centrer la modale -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mb-0" id="modalLabel{{ task.id }}">{{ task.title }}</h5> <!-- Ajout d'une marge à droite -->
+                                <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning" title="Éditer" style="margin-left: 10px;"> <!-- Bouton jaune avec espace à gauche -->
+                                    <i class="fas fa-pencil"></i> <!-- Icône de stylo -->
+                                </a>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{ task.content|nl2br }}</p> <!-- Contenu de la tâche -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-warning text-center" role="alert">
+                        Il n'y a pas encore de tâche enregistrée. 
+                        <a href="{{ path('task_create') }}" class="btn btn-warning">Créer une tâche</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

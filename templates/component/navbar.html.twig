@@ -1,0 +1,39 @@
+{# templates/navbar.html.twig #}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <span class="navbar-brand"><i class="fas fa-tasks"></i> To Do List</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('homepage') }}" aria-current="page">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('task_list') }}">Tâches</a>
+                </li>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_create') }}">Créer un utilisateur</a>
+                    </li>
+                {% endif %}
+
+                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('login') }}">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_create') }}">Inscription</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('logout') }}" title="Déconnexion" style="color: rgb(240, 93, 93);";><i class="fa-solid fa-user-xmark"></i></a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,16 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div class="row">
-        <h1>Créer une nouvelle tâche</h1>
-        {{ form_start(form, {'action' : path('task_create'), 'method': 'POST'}) }}
-            <div class="mb-3">
-                {{ form_widget(form) }}
-            </div>
+{% block title %}Création tâche - To Do List{% endblock %}
 
-            <button type="submit" class="btn btn-success">Ajouter</button>
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+    <div class="col-md-4">
+        <h1 class="h3 mb-4 text-center">Création d'une tâche</h1>
+        
+        {{ form_start(form, {'action' : path('task_create'), 'method': 'POST'}) }}
+
+        {# Champ pour le titre #}
+        <div class="mb-3">
+            {{ form_row(form.title, {
+                'label': 'Titre',
+                'attr': {'class': 'form-control', 'style': 'width: 100%'}
+            }) }}
+        </div>
+        
+        {# Champ pour le contenu #}
+        <div class="mb-3">
+            {{ form_row(form.content, {
+                'label': 'Contenu',
+                'attr': {'class': 'form-control', 'style': 'width: 100%'}
+            }) }}
+        </div>
+
+        {# Bouton d'ajout de tâche #}
+        <button type="submit" class="btn btn-success w-100">Ajouter</button>
+        
         {{ form_end(form) }}
 
-        <a href="{{ path('task_list') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+        {# Lien pour revenir à la liste des tâches #}
+        <a href="{{ path('task_list') }}" class="btn btn-primary w-100 mt-3">Retour à la liste des tâches</a>
     </div>
+</div>
 {% endblock %}
