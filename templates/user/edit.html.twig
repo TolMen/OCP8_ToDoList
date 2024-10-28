@@ -1,54 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modification utilisateur - To Do List {% endblock %}
+{% block title %}Modification utilisateur - To Do List{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
-    <div class="col-md-4">
-        <h1 class="h3 mb-4 text-center">Modification : <strong>{{ user.username }}</strong></h1>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+        <div class="col-md-4">
+            <h1 class="h3 mb-4 text-center">Modification : <strong>{{ user.username }}</strong></h1>
 
-        {{ form_start(form) }}
+            {{ form_start(form) }}
 
-        {# Champs du formulaire avec largeur 100% #}
+            {# Champs du formulaire #}
+            <div class="mb-3">
+                {{ form_row(form.username, {
+                    'label': "Nom d'utilisateur",
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
 
-        <div class="mb-3">
-            {{ form_row(form.username, {
-                'label': "Nom d'utilisateur",
-                'attr': {'class': 'form-control', 'style': 'width: 100%;'}
-            }) }}
+            <div class="mb-3">
+                {{ form_row(form.email, {
+                    'label': 'Adresse email',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.plainPassword.first, {
+                    'label': 'Mot de passe',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.plainPassword.second, {
+                    'label': 'Tapez le mot de passe à nouveau',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.roles, {
+                    'label': 'Rôles (par défaut utilisateur)'
+                }) }}
+            </div>
+
+            {# Bouton de modification #}
+            <button type="submit" class="btn btn-success w-100">Modifier</button>
+
+            {{ form_end(form) }}
         </div>
-
-        <div class="mb-3">
-            {{ form_row(form.email, {
-                'label': 'Adresse email',
-                'attr': {'class': 'form-control', 'style': 'width: 100%;'}
-            }) }}
-        </div>
-
-        <div class="mb-3">
-            {{ form_row(form.plainPassword.first, {
-                'label': 'Mot de passe',
-                'attr': {'class': 'form-control', 'style': 'width: 100%;'}
-            }) }}
-        </div>
-
-        <div class="mb-3">
-            {{ form_row(form.plainPassword.second, {
-                'label': 'Tapez le mot de passe à nouveau',
-                'attr': {'class': 'form-control', 'style': 'width: 100%;'}
-            }) }}
-        </div>
-
-        <div class="mb-3">
-            {{ form_row(form.roles, {
-                'label': 'Rôles (par défaut utilisateur)',
-            }) }}
-        </div>
-
-        {# Bouton de modification #}
-        <button type="submit" class="btn btn-success w-100">Modifier</button>
-
-        {{ form_end(form) }}
     </div>
-</div>
 {% endblock %}

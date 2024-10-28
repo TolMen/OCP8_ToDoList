@@ -3,7 +3,7 @@
 {% block title %}Création tâche - To Do List{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+<div class="container d-flex justify-content-center align-items-center task-container">
     <div class="col-md-4">
         <h1 class="h3 mb-4 text-center">Création d'une tâche</h1>
         
@@ -13,7 +13,7 @@
         <div class="mb-3">
             {{ form_row(form.title, {
                 'label': 'Titre',
-                'attr': {'class': 'form-control', 'style': 'width: 100%'}
+                'attr': {'class': 'form-control'}
             }) }}
         </div>
         
@@ -21,7 +21,7 @@
         <div class="mb-3">
             {{ form_row(form.content, {
                 'label': 'Contenu',
-                'attr': {'class': 'form-control', 'style': 'width: 100%'}
+                'attr': {'class': 'form-control'}
             }) }}
         </div>
 

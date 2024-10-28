@@ -3,38 +3,49 @@
 {% block title %}Inscription - To Do List{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
-    <div class="col-md-4">
+    <div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+        <div class="col-md-4">
 
-        {# Affichage des erreurs éventuelles #}
-        {% for flash_error in app.flashes('verify_email_error') %}
-            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-        {% endfor %}
+            {# Affichage des erreurs éventuelles #}
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-        <h1 class="h3 mb-3 font-weight-normal text-center">Inscription</h1>
+            <h1 class="h3 mb-3 font-weight-normal text-center">Inscription</h1>
 
-        {{ form_start(form) }}
+            {{ form_start(form) }}
 
-        <div class="mb-3">
-            {{ form_row(form.username) }}
+            <div class="mb-3">
+                {{ form_row(form.username, {
+                    'label': 'Nom d\'utilisateur',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.email, {
+                    'label': 'Email',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.plainPassword.first, {
+                    'label': 'Mot de passe',
+                    'attr': {'class': 'form-control'}
+                }) }} 
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.plainPassword.second, {
+                    'label': 'Confirmer le mot de passe',
+                    'attr': {'class': 'form-control'}
+                }) }} 
+            </div>
+            <div class="mb-3">
+                {{ form_row(form.roles) }} 
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+
+            {{ form_end(form) }}
         </div>
-        <div class="mb-3">
-            {{ form_row(form.email) }}
-        </div>
-        <div class="mb-3">
-            {{ form_row(form.plainPassword.first) }} 
-        </div>
-        <div class="mb-3">
-            {{ form_row(form.plainPassword.second) }} 
-        </div>
-        <div class="mb-3">
-            {{ form_row(form.roles) }} 
-        </div>
-
-        
-        <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
-
-        {{ form_end(form) }}
     </div>
-</div>
 {% endblock %}
