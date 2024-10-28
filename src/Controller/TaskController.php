@@ -33,34 +33,12 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer l'utilisateur actuel ou assigner "Anonyme"
-            $user = $this->getUser();
-            if ($user) {
-                $task->setAuthor($user);
-            } else {
-                // Rechercher si l'utilisateur "Anonyme" existe déjà
-                $anonymousUser = $em->getRepository(User::class)->findOneBy(['username' => 'Anonyme']);
-
-                // Si l'utilisateur n'existe pas, le créer
-                if (!$anonymousUser) {
-                    $anonymousUser = new User();
-                    $anonymousUser->setUsername('Anonyme');
-                    $anonymousUser->setEmail('anonyme@example.com');
-                    $anonymousUser->setPassword(''); // Pas de mot de passe pour un utilisateur anonyme
-
-                    // Persister l'utilisateur "Anonyme"
-                    $em->persist($anonymousUser);
-                    $em->flush(); // On flush immédiatement pour s'assurer qu'il est bien dans la base de données
-                }
-
-                // Assigner cet utilisateur anonyme à la tâche
-                $task->setAuthor($anonymousUser);
-            }
+            $user = $this->getUser() ?? $this->getAnonymousUser($em);
+            $task->setAuthor($user);
 
             // Persister la tâche
             $em->persist($task);
             $em->flush();
-
-            $this->addFlash('success', 'La tâche a bien été ajoutée.');
 
             return $this->redirectToRoute('task_list');
         }
@@ -68,6 +46,24 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    private function getAnonymousUser(EntityManagerInterface $em): User
+    {
+        $anonymousUser = $em->getRepository(User::class)->findOneBy(['username' => 'Anonyme']);
+
+        // Créer l'utilisateur "Anonyme" s'il n'existe pas
+        if (!$anonymousUser) {
+            $anonymousUser = (new User())
+                ->setUsername('Anonyme')
+                ->setEmail('anonyme@example.com')
+                ->setPassword('');
+
+            $em->persist($anonymousUser);
+            $em->flush();
+        }
+
+        return $anonymousUser;
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
@@ -79,8 +75,6 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
-
-            $this->addFlash('success', 'La tâche a bien été modifiée.');
 
             return $this->redirectToRoute('task_list');
         }
@@ -97,8 +91,6 @@ class TaskController extends AbstractController
         $task->toggle(!$task->isDone());
         $em->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
-
         return $this->redirectToRoute('task_list');
     }
 
@@ -109,10 +101,7 @@ class TaskController extends AbstractController
         if ($task->getAuthor() === $this->getUser() || $this->isGranted('ROLE_ADMIN')) {
             $em->remove($task);
             $em->flush();
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
-        } else {
-            $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour supprimer cette tâche.');
-        }
+        } else {}
 
         return $this->redirectToRoute('task_list');
     }
