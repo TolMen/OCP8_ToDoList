@@ -13,12 +13,18 @@
                     <a class="nav-link" href="{{ path('task_list') }}">Tâches</a>
                 </li>
 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_list') }}">Utilisateurs</a>
+                    </li>
+                {% endif %}
+
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('login') }}">Connexion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('user_create') }}">Inscription</a>
+                        <a class="nav-link" href="{{ path('register') }}">Inscription</a>
                     </li>
                 {% else %}
                     <li class="nav-item">

@@ -25,7 +25,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/create', name: 'user_create')]
+    #[Route('/register', name: 'register')]
     public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
@@ -35,7 +35,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('user/create.html.twig', [
+        return $this->render('user/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
