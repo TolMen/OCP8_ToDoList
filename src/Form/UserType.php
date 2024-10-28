@@ -16,10 +16,12 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $formControlStyle = ['class' => 'form-control', 'style' => 'width: 100%;'];
+
         $builder
             ->add('username', TextType::class, [
                 'label' => "Nom d'utilisateur",
-                'attr' => ['class' => 'form-control', 'style' => 'width: 100%;'],
+                'attr' => $formControlStyle,
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -27,23 +29,23 @@ class UserType extends AbstractType
                 'required' => $options['is_creation'],
                 'first_options' => [
                     'label' => 'Mot de passe',
-                    'attr' => ['class' => 'form-control', 'style' => 'width: 100%;'],
+                    'attr' => $formControlStyle,
                 ],
                 'second_options' => [
                     'label' => 'Tapez le mot de passe à nouveau',
-                    'attr' => ['class' => 'form-control', 'style' => 'width: 100%;'],
+                    'attr' => $formControlStyle,
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
-                'attr' => ['class' => 'form-control', 'style' => 'width: 100%;'],
+                'attr' => $formControlStyle,
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
                 'choice_attr' => [
-                'ROLE_ADMIN' => ['style' => 'margin-left: 10px;'],
+                    'ROLE_ADMIN' => ['style' => 'margin-left: 10px;'],
                 ],
                 'expanded' => true,
                 'multiple' => true,
@@ -55,8 +57,8 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class, // Associer ce formulaire à l'entité User
-            'is_creation' => false, // Valeur par défaut
+            'data_class' => User::class,
+            'is_creation' => false,
         ]);
     }
 }

@@ -15,19 +15,17 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Titre', // Ajout d'un label pour le champ titre
+                'label' => 'Titre',
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu', // Ajout d'un label pour le champ contenu
-            ])
-            //->add('author') // Pour gérer l'utilisateur authentifié, tu peux le faire dans le contrôleur.
-        ;
+                'label' => 'Contenu',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Task::class, // Associer ce formulaire à l'entité Task
+            'data_class' => Task::class,
         ]);
     }
 }
