@@ -56,6 +56,16 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/users/{id}/delete', name: 'user_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(User $user, EntityManagerInterface $em): Response
+    {
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('user_list');
+    }
+
     private function handleForm($form, Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): bool
     {
         $form->handleRequest($request);
