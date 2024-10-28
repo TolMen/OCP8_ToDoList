@@ -31,16 +31,7 @@ class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user, ['is_creation' => true]);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Hash du mot de passe
-            $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
-            $user->setPassword($hashedPassword);
-
-            $em->persist($user);
-            $em->flush();
-
+        if ($this->handleForm($form, $request, $user, $passwordHasher, $em)) {
             return $this->redirectToRoute('homepage');
         }
 
@@ -55,19 +46,7 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // On ne modifie le mot de passe que s'il a été saisi
-            if ($form->get('plainPassword')->getData()) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
-                $user->setPassword($hashedPassword);
-            }
-
-            $em->flush();
-
-            $this->addFlash('success', "L'utilisateur a bien été modifié.");
-
+        if ($this->handleForm($form, $request, $user, $passwordHasher, $em)) {
             return $this->redirectToRoute('user_list');
         }
 
@@ -75,5 +54,25 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
         ]);
+    }
+
+    private function handleForm($form, Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): bool
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hash du mot de passe uniquement si un mot de passe a été saisi
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+            }
+
+            $em->persist($user);
+            $em->flush();
+
+            return true;
+        }
+
+        return false;
     }
 }
