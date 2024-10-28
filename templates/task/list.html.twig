@@ -80,6 +80,20 @@
                                 </div>
                                 <div class="modal-body">
                                     <p>{{ task.content|nl2br }}</p>
+
+                                    {# Afficher les tags #}
+                                    <div>
+                                        <h6>Tags :</h6>
+                                        {% if task.tags is empty %}
+                                            <p>Aucun tag associé.</p>
+                                        {% else %}
+                                            <ul class="list-unstyled">
+                                                {% for tag in task.tags %}
+                                                    <li>{{ tag.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

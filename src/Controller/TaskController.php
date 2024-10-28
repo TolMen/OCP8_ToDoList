@@ -101,7 +101,7 @@ class TaskController extends AbstractController
         if ($task->getAuthor() === $this->getUser() || $this->isGranted('ROLE_ADMIN')) {
             $em->remove($task);
             $em->flush();
-        } else {}
+        }
 
         return $this->redirectToRoute('task_list');
     }
