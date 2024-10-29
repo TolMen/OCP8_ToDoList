@@ -1,13 +1,17 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
-    #csrf_protection: true
+    # csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        # Ajoutez cette ligne pour définir un nom de cookie personnalisé
+        name: MYAPPSESSID  # Remplacez par un nom qui vous convient
+        cookie_secure: auto  # ou true si vous utilisez HTTPS
+        cookie_httponly: true # Pour protéger le cookie des accès JavaScript
 
-    #esi: true
-    #fragments: true
+    # esi: true
+    # fragments: true
 
 when@test:
     framework:
