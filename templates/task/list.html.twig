@@ -20,7 +20,11 @@
                     </div>
                 </div>
             {% else %}
-                {% for task in tasks %}
+                {# Tâches en cours #}
+                {% set ongoingTasks = tasks|filter(task => not task.isDone) %}
+                {% set completedTasks = tasks|filter(task => task.isDone) %}
+
+                {% for task in ongoingTasks %}
                     <div class="col-12 col-md-3 mb-4 d-flex justify-content-center">
                         <div class="card shadow-sm w-100">
                             <div class="card-body">
@@ -28,6 +32,94 @@
                                     <div>
                                         <h5 class="card-title mb-0">{{ task.title }}</h5>
                                         <p class="card-text"><small>Auteur : {{ task.author ? task.author.username : 'Anonyme' }}</small></p>
+                                        <p class="card-text"><small>Créée le : {{ task.createdAt|date('d/m/Y H:i') }}</small></p> {# Affichage de la date de création #}
+                                    </div>
+                                    <div>
+                                        <span class="{{ task.isDone ? 'text-success' : 'text-danger' }}" style="font-size: 1.5em;">
+                                            <i class="{{ task.isDone ? 'fas fa-check-circle' : 'fas fa-times-circle' }}"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ task.id }}">
+                                        <i class="fa-solid fa-file-lines"></i>
+                                    </a>
+                                    <div class="d-flex align-items-center">
+                                        <form action="{{ path('task_toggle', {'id' : task.id }) }}" method="post" class="flex-grow-1 me-2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton{{ task.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    {{ task.isDone ? 'Terminé' : 'En cours' }}
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ task.id }}">
+                                                    <li><button type="submit" name="status" value="done" class="dropdown-item">Terminé</button></li>
+                                                    <li><button type="submit" name="status" value="in_progress" class="dropdown-item">En cours</button></li>
+                                                </ul>
+                                            </div>
+                                        </form>
+                                        {% if app.user %}
+                                            {% if (task.author is null or task.author.username == 'Anonyme') and is_granted('ROLE_ADMIN') or task.author.id == app.user.id %}
+                                                <form action="{{ path('task_delete', {'id' : task.id }) }}" method="post" class="ms-2">
+                                                    <button class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Fenêtre modale pour afficher le contenu de la tâche #}
+                    <div class="modal fade" id="modal{{ task.id }}" tabindex="-1" aria-labelledby="modalLabel{{ task.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title mb-0" id="modalLabel{{ task.id }}">{{ task.title }}</h5>
+                                    <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning ms-2" title="Éditer">
+                                        <i class="fas fa-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ task.content|nl2br }}</p>
+
+                                    {# Afficher les tags #}
+                                    <div>
+                                        <h6>Tags :</h6>
+                                        {% if task.tags is empty %}
+                                            <p>Aucun tag associé.</p>
+                                        {% else %}
+                                            <ul class="list-unstyled">
+                                                {% for tag in task.tags %}
+                                                    <li>{{ tag.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {# Séparateur entre les tâches en cours et les tâches terminées #}
+                {% if ongoingTasks is not empty and completedTasks is not empty %}
+                    <hr class="my-4">
+                {% endif %}
+
+                {# Tâches terminées #}
+                {% for task in completedTasks %}
+                    <div class="col-12 col-md-3 mb-4 d-flex justify-content-center">
+                        <div class="card shadow-sm w-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                        <p class="card-text"><small>Auteur : {{ task.author ? task.author.username : 'Anonyme' }}</small></p>
+                                        <p class="card-text"><small>Créée le : {{ task.createdAt|date('d/m/Y H:i') }}</small></p>
                                     </div>
                                     <div>
                                         <span class="{{ task.isDone ? 'text-success' : 'text-danger' }}" style="font-size: 1.5em;">
