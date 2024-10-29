@@ -1,4 +1,3 @@
-{# templates/navbar.html.twig #}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <span class="navbar-brand"><i class="fas fa-tasks"></i> To Do List</span>
@@ -16,7 +15,7 @@
 
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('user_create') }}">Créer un utilisateur</a>
+                        <a class="nav-link" href="{{ path('user_list') }}">Utilisateurs</a>
                     </li>
                 {% endif %}
 
@@ -25,14 +24,13 @@
                         <a class="nav-link" href="{{ path('login') }}">Connexion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('user_create') }}">Inscription</a>
+                        <a class="nav-link" href="{{ path('register') }}">Inscription</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('logout') }}" title="Déconnexion" style="color: rgb(240, 93, 93);";><i class="fa-solid fa-user-xmark"></i></a>
+                        <a class="nav-link text-danger" href="{{ path('logout') }}" title="Déconnexion"><i class="fa-solid fa-user-xmark"></i></a>
                     </li>
                 {% endif %}
-
             </ul>
         </div>
     </div>

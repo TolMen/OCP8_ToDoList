@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
     #[Route('/users', name: 'user_list')]
+    #[IsGranted('ROLE_ADMIN')]
     public function list(EntityManagerInterface $em): Response
     {
         $users = $em->getRepository(User::class)->findAll();
@@ -23,50 +25,28 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/create', name: 'user_create')]
+    #[Route('/register', name: 'register')]
     public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, ['is_creation' => true]);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Hash du mot de passe
-            $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
-            $user->setPassword($hashedPassword);
-
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
-
-            return $this->redirectToRoute('user_list');
+        if ($this->handleForm($form, $request, $user, $passwordHasher, $em)) {
+            return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('user/create.html.twig', [
+        return $this->render('user/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/users/{id}/edit', name: 'user_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserType::class, $user);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // On ne modifie le mot de passe que s'il a été saisi
-            if ($form->get('plainPassword')->getData()) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
-                $user->setPassword($hashedPassword);
-            }
-
-            $em->flush();
-
-            $this->addFlash('success', "L'utilisateur a bien été modifié.");
-
+        if ($this->handleForm($form, $request, $user, $passwordHasher, $em)) {
             return $this->redirectToRoute('user_list');
         }
 
@@ -74,5 +54,35 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
         ]);
+    }
+
+    #[Route('/users/{id}/delete', name: 'user_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(User $user, EntityManagerInterface $em): Response
+    {
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('user_list');
+    }
+
+    private function handleForm($form, Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): bool
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hash du mot de passe uniquement si un mot de passe a été saisi
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+            }
+
+            $em->persist($user);
+            $em->flush();
+
+            return true;
+        }
+
+        return false;
     }
 }

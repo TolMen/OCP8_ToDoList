@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use App\Entity\Tag; // Assurez-vous d'importer la classe Tag
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -15,19 +17,23 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Titre', // Ajout d'un label pour le champ titre
+                'label' => 'Titre',
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu', // Ajout d'un label pour le champ contenu
+                'label' => 'Contenu',
             ])
-            //->add('author') // Pour gérer l'utilisateur authentifié, tu peux le faire dans le contrôleur.
-        ;
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Task::class, // Associer ce formulaire à l'entité Task
+            'data_class' => Task::class,
         ]);
     }
 }

@@ -3,36 +3,55 @@
 {% block title %}Modification tâche - To Do List{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
-    <div class="col-md-4">
+<div class="container d-flex justify-content-center align-items-center task-container">
+    <div class="col-md-8">
         <h1 class="h3 mb-4 text-center">Modification de la tâche</h1>
         
         {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id }), 'method': 'POST'}) }}
 
-        {# Champ pour le titre #}
-        <div class="mb-3">
-            {{ form_row(form.title, {
-                'label': 'Titre',
-                'attr': {'class': 'form-control', 'style': 'width: 100%'}
-            }) }}
-        </div>
-        
-        {# Champ pour le contenu #}
-        <div class="mb-3">
-            {{ form_row(form.content, {
-                'label': 'Contenu',
-                'attr': {'class': 'form-control', 'style': 'width: 100%; height: 200px;'}
-            }) }}
+        <div class="row">
+            {# Colonne pour le titre et le contenu #}
+            <div class="col-md-8">
+                {# Champ pour le titre #}
+                <div class="mb-3">
+                    {{ form_row(form.title, {
+                        'label': 'Titre',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+                
+                {# Champ pour le contenu #}
+                <div class="mb-3">
+                    {{ form_row(form.content, {
+                        'label': 'Contenu',
+                        'attr': {'class': 'form-control', 'style': 'height: 200px;'}
+                    }) }}
+                </div>
+            </div>
+
+            {# Colonne pour les tags #}
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label">Tags</label>
+                    <div class="form-check">
+                        {% for tag in form.tags %}
+                            <div class="form-check">
+                                {{ form_widget(tag, {'attr': {'class': 'form-check-input'}}) }}
+                                <label class="form-check-label">{{ tag.vars.label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {# Bouton de modification #}
-        <button type="submit" class="btn btn-success w-100">Modifier</button>
+        {# Boutons alignés à gauche avec espacement #}
+        <div class="d-flex">
+            <button type="submit" class="btn btn-success me-2">Modifier</button>
+            <a href="{{ path('task_list') }}" class="btn btn-secondary">Retour à la liste des tâches</a>
+        </div>
         
         {{ form_end(form) }}
-
-        {# Lien pour revenir à la liste des tâches #}
-        <a href="{{ path('task_list') }}" class="btn btn-secondary w-100 mt-3">Retour à la liste des tâches</a>
     </div>
 </div>
-
 {% endblock %}

@@ -97,6 +97,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.14",
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "phpunit/phpunit": "^9.6",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",

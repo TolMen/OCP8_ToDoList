@@ -3,7 +3,7 @@
 {% block title %}Connexion - To Do List{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 85vh;">
+<div class="container d-flex justify-content-center align-items-center login-container">
     <div class="col-md-4">
         {% if error %}
             <div class="alert alert-danger" role="alert">
@@ -15,13 +15,13 @@
 
         <form action="{{ path('login_check') }}" method="post">
             <div class="mb-3">
-                <label for="username" class="form-label">Email :</label>
-                <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}" required autofocus />
+                <label for="username" class="form-label">Adresse email :</label>
+                <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}" required autofocus aria-label="Email" />
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe :</label>
-                <input type="password" id="password" name="_password" class="form-control" required />
+                <input type="password" id="password" name="_password" class="form-control" required aria-label="Mot de passe" />
             </div>
 
             <button class="btn btn-primary w-100" type="submit">Se connecter</button>
