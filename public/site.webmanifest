@@ -1,0 +1,6 @@
+{
+    "name": "To Do List",
+    "short_name": "Todolist",
+    "start_url": "/",
+    "display": "standalone"
+}

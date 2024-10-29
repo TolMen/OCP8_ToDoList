@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
-    #[Route('/users', name: 'user_list')]
+    #[Route('/users', name: 'user_list', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function list(EntityManagerInterface $em): Response
     {
@@ -25,7 +25,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'register')]
+    #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
@@ -40,7 +40,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/{id}/edit', name: 'user_edit')]
+    #[Route('/users/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function edit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -56,7 +56,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/{id}/delete', name: 'user_delete')]
+    #[Route('/users/{id}/delete', name: 'user_delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(User $user, EntityManagerInterface $em): Response
     {

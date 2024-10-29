@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TaskController extends AbstractController
 {
-    #[Route('/tasks', name: 'task_list')]
+    #[Route('/tasks', name: 'task_list', methods: ['GET'])]
     public function list(EntityManagerInterface $em): Response
     {
         // Récupérer les tâches triées par date de création (createdAt) de la plus récente à la plus ancienne
@@ -24,7 +24,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/create', name: 'task_create')]
+    #[Route('/tasks/create', name: 'task_create', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $task = new Task();
@@ -70,7 +70,7 @@ class TaskController extends AbstractController
         return $anonymousUser;
     }
 
-    #[Route('/tasks/{id}/edit', name: 'task_edit')]
+    #[Route('/tasks/{id}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
     public function edit(Task $task, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(TaskType::class, $task);
@@ -89,7 +89,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['POST'])]
     public function toggleTask(Task $task, EntityManagerInterface $em): Response
     {
         $task->toggle(!$task->isDone());
@@ -98,7 +98,7 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete')]
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['POST'])]
     public function deleteTask(Task $task, EntityManagerInterface $em): Response
     {
         // Vérifiez que l'utilisateur connecté est l'auteur de la tâche ou a un rôle ADMIN

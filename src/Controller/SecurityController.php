@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
+    #[Route('/login', name: 'login', methods: ['GET'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render('security/login.html.twig', [
@@ -18,14 +18,14 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/login_check', name: 'login_check')]
+    #[Route('/login_check', name: 'login_check', methods: ['POST'])]
     public function loginCheck(): void
     {
         // Cette route est gérée automatiquement par le firewall dans security.yaml
         throw new \LogicException('This method should not be reached directly.');
     }
 
-    #[Route('/logout', name: 'logout')]
+    #[Route('/logout', name: 'logout', methods: ['GET'])]
     public function logout(): void
     {
         // Cette route est également gérée automatiquement par le firewall
