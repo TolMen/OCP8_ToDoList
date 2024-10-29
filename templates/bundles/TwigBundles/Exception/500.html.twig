@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur serveur - 500{% endblock %}
+
+{% block body %}
+    <div class="error-page">
+        <h1>500 - Erreur du serveur</h1>
+        <p>Oops ! Quelque chose s'est mal passé de notre côté.</p>
+        <p>Veuillez réessayer plus tard ou <a href="{{ path('homepage') }}">retourner à l'accueil</a>.</p>
+    </div>
+{% endblock %}
