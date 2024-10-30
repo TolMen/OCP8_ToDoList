@@ -16,7 +16,6 @@ class TaskController extends AbstractController
     #[Route('/tasks', name: 'task_list', methods: ['GET'])]
     public function list(EntityManagerInterface $em): Response
     {
-        // Récupérer les tâches triées par date de création (createdAt) de la plus récente à la plus ancienne
         $tasks = $em->getRepository(Task::class)->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('task/list.html.twig', [
@@ -33,14 +32,12 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer l'utilisateur actuel ou assigner "Anonyme"
+            
             $user = $this->getUser() ?? $this->getAnonymousUser($em);
             $task->setAuthor($user);
 
-            // Définir la date de création
             $task->setCreatedAt(new \DateTime());
 
-            // Persister la tâche
             $em->persist($task);
             $em->flush();
 
@@ -52,7 +49,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    private function getAnonymousUser(EntityManagerInterface $em): User
+    public function getAnonymousUser(EntityManagerInterface $em): User
     {
         $anonymousUser = $em->getRepository(User::class)->findOneBy(['username' => 'Anonyme']);
 
