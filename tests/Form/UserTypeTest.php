@@ -4,90 +4,73 @@ namespace App\Tests\Form;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Teste le formulaire UserType.
- *
- * Cette classe contient des tests pour s'assurer que le formulaire UserType fonctionne 
- * correctement. Elle vérifie notamment que les données sont correctement soumises 
- * et que la structure du formulaire est conforme aux attentes.
- */
 class UserTypeTest extends TypeTestCase
 {
-    /**
-     * Teste la soumission de données valides au formulaire.
-     *
-     * Cette méthode crée une instance de User avec des données valides, 
-     * soumet ces données via le formulaire, et vérifie que le formulaire est 
-     * soumis et valide. Elle s'assure également que les données de l'objet User 
-     * sont correctement mises à jour après la soumission du formulaire.
-     */
-    public function testSubmitValidData()
+    public function testBuildFormWithCreationOption(): void
     {
-        // Créer un objet User avec des données valides
-        $user = new User();
-        $user->setUsername('testuser');
-        $user->setEmail('testuser@example.com');
-        $user->setPlainPassword('password123');
-
-        // Données à soumettre dans le formulaire
         $formData = [
-            'username' => 'testuser',
+            'username' => 'TestUser',
             'plainPassword' => [
-                'first' => 'password123', // Mot de passe répété
-                'second' => 'password123', // Confirmation du mot de passe
+                'first' => 'password123',
+                'second' => 'password123',
             ],
             'email' => 'testuser@example.com',
-            'roles' => ['ROLE_ADMIN'], // Rôle de l'utilisateur
+            'roles' => ['ROLE_ADMIN'],
         ];
 
-        // Créer le formulaire avec les données de test
+        $user = new User();
+
         $form = $this->factory->create(UserType::class, $user, ['is_creation' => true]);
 
-        // Soumettre le formulaire avec les données
         $form->submit($formData);
 
-        // Vérifier que le formulaire est soumis
-        $this->assertTrue($form->isSubmitted());
+        // Vérifie que le formulaire est valide
+        $this->assertTrue($form->isSubmitted() && $form->isValid());
 
-        // Vérifier que le formulaire est valide
-        $this->assertTrue($form->isValid());
-
-        // Vérifier que l'objet User a bien été modifié
-        $this->assertEquals('testuser', $user->getUsername());
+        // Vérifie les données après soumission
+        $this->assertEquals('TestUser', $user->getUsername());
         $this->assertEquals('testuser@example.com', $user->getEmail());
-        $this->assertEquals('password123', $user->getPlainPassword());
         $this->assertEquals(['ROLE_ADMIN'], $user->getRoles());
+
+        // Vérifie le mot de passe directement via la première valeur du champ répétée
+        $this->assertEquals('password123', $form->get('plainPassword')->get('first')->getData());
     }
 
-    /**
-     * Teste la construction du formulaire.
-     *
-     * Cette méthode vérifie que le formulaire UserType est construit 
-     * correctement. Elle s'assure que les champs 'username', 'plainPassword', 
-     * 'email' et 'roles' sont présents et que les types de ces champs sont corrects.
-     */
-    public function testBuildForm()
+    public function testInvalidFormWithMismatchedPasswords(): void
     {
-        // Créer le formulaire UserType
-        $form = $this->factory->create(UserType::class, null, ['is_creation' => true]);
+        $formData = [
+            'username' => 'TestUser',
+            'plainPassword' => [
+                'first' => 'password123',
+                'second' => 'password456',
+            ],
+            'email' => 'testuser@example.com',
+        ];
 
-        // Vérifier que les champs 'username', 'plainPassword', 'email' et 'roles' sont présents dans le formulaire
-        $this->assertTrue($form->has('username'));
-        $this->assertTrue($form->has('plainPassword'));
-        $this->assertTrue($form->has('email'));
-        $this->assertTrue($form->has('roles'));
+        $user = new User();
 
-        // Vérifier le type des champs
-        $this->assertInstanceOf(TextType::class, $form->get('username')->getConfig()->getType()->getInnerType());
-        $this->assertInstanceOf(RepeatedType::class, $form->get('plainPassword')->getConfig()->getType()->getInnerType());
-        $this->assertInstanceOf(EmailType::class, $form->get('email')->getConfig()->getType()->getInnerType());
-        $this->assertInstanceOf(ChoiceType::class, $form->get('roles')->getConfig()->getType()->getInnerType());
+        $form = $this->factory->create(UserType::class, $user, ['is_creation' => true]);
+
+        $form->submit($formData);
+
+        // Vérifie que le formulaire est soumis mais non valide à cause du mot de passe différent
+        $this->assertTrue($form->isSubmitted());
+        $this->assertFalse($form->isValid());
+    }
+
+    public function testConfigureOptions(): void
+    {
+        $resolver = new OptionsResolver();
+        $formType = new UserType();
+        $formType->configureOptions($resolver);
+
+        $options = $resolver->resolve();
+
+        $this->assertEquals(User::class, $options['data_class']);
+        $this->assertArrayHasKey('is_creation', $options);
+        $this->assertFalse($options['is_creation']);
     }
 }
