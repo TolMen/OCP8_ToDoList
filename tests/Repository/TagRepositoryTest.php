@@ -12,41 +12,50 @@ class TagRepositoryTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        // Démarre le noyau Symfony pour avoir accès au conteneur
         self::bootKernel();
-
-        // Récupère le repository depuis le conteneur
         $this->tagRepository = static::getContainer()->get(TagRepository::class);
     }
 
+    /**
+     * Teste l'ajout d'un nouveau tag.
+     *
+     * Test de type : Unitaire 
+     *
+     * Cette méthode crée un nouveau tag, le persiste dans 
+     * la base de données et vérifie que son ID est 
+     * correctement attribué après l'ajout.
+     */
     public function testAddTag(): void
     {
-        // Crée un nouveau tag
         $tag = new Tag();
         $tag->setName('Symfony');
 
-        // Persiste et flush le tag
         $entityManager = $this->tagRepository->getEntityManager();
         $entityManager->persist($tag);
         $entityManager->flush();
 
-        // Vérifie que le tag a bien été ajouté
         $this->assertNotNull($tag->getId());
     }
 
+    /**
+     * Teste la recherche d'un tag par son ID.
+     *
+     * Test de type : Unitaire 
+     *
+     * Cette méthode crée et persiste un tag dans la base 
+     * de données, puis le recherche par son ID et vérifie 
+     * que le tag récupéré correspond au tag créé.
+     */
     public function testFindTagById(): void
     {
-        // Crée et persiste un tag pour le test
         $tag = new Tag();
         $tag->setName('Doctrine');
         $entityManager = $this->tagRepository->getEntityManager();
         $entityManager->persist($tag);
         $entityManager->flush();
 
-        // Cherche le tag par son ID
         $foundTag = $this->tagRepository->find($tag->getId());
 
-        // Vérifie que le tag récupéré correspond au tag créé
         $this->assertInstanceOf(Tag::class, $foundTag);
         $this->assertEquals('Doctrine', $foundTag->getName());
     }

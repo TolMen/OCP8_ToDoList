@@ -6,6 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
+    /**
+     * Teste la page d'accueil de l'application.
+     *
+     * Test de type : Unitaire & Fonctionnel
+     *
+     * Cette méthode simule une requête GET à la page d'accueil, 
+     * vérifie que la réponse est réussie, que le titre de la page 
+     * contient "Accueil - To Do List", que le texte dans les 
+     * éléments h1 et p correspond aux attentes, et qu'un lien 
+     * vers la liste des tâches existe. Elle vérifie également 
+     * que la redirection vers la liste des tâches fonctionne.
+     */
     public function testIndex()
     {
         $client = static::createClient();
