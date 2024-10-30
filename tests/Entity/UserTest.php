@@ -15,6 +15,19 @@ class UserTest extends TestCase
         $this->validator = Validation::createValidator();
     }
 
+    public function testGetId(): void
+    {
+        $user = new User();
+        // Simulez l'assignation d'un identifiant, si nécessaire
+        $reflection = new \ReflectionClass($user);
+        $idProperty = $reflection->getProperty('id');
+        $idProperty->setAccessible(true);
+        $idProperty->setValue($user, 1); // Simulez un ID
+
+        $this->assertEquals(1, $user->getId());
+    }
+
+
     /**
      * Teste la méthode setEmail() et getEmail() de la classe User.
      *
