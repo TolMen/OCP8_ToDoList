@@ -129,7 +129,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         // Vérifiez que le bon titre est présent
-        $this->assertSelectorTextContains('h1', 'Liste des Tâches'); // Assurez-vous que cela correspond au texte exact dans votre template
+        $this->assertSelectorTextContains('h1', 'Liste des tâches'); // Assurez-vous que cela correspond au texte exact dans votre template
     }
 
     /**
@@ -181,7 +181,7 @@ class TaskControllerTest extends WebTestCase
         $this->loginAsAuthenticatedUser(); // Connexion de l'utilisateur
 
         // Accéder à la méthode de basculement de la tâche
-        $this->client->request('GET', '/tasks/' . $this->taskId . '/toggle');
+        $this->client->request('POST', '/tasks/' . $this->taskId . '/toggle');
 
         // Vérifier que la redirection se fait vers la liste des tâches
         $this->assertResponseRedirects('/tasks');
@@ -204,7 +204,7 @@ class TaskControllerTest extends WebTestCase
         $this->loginAsAuthenticatedUser(); // Connexion de l'utilisateur
 
         // Accéder à la méthode de suppression de la tâche
-        $this->client->request('GET', '/tasks/' . $this->taskId . '/delete');
+        $this->client->request('POST', '/tasks/' . $this->taskId . '/delete');
 
         // Vérifier que la redirection se fait vers la liste des tâches
         $this->assertResponseRedirects('/tasks');
