@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Task;
-use App\Entity\Tag; // Assurez-vous d'importer la classe Tag
+use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
