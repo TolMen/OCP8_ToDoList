@@ -1,0 +1,36 @@
+@startuml
+
+
+entity user {
+#id: int
+~email: varchar
+~password: varchar
+~username: varchar
++roles: json
+}
+
+class task_tag  {
+-task_id: int
+-tag_id
+}
+
+class task {
+#id: int
++title: varchar
++content: text
++is_done: tinyint
++created_at: datetime
+-author_id: int
+}
+
+class tag {
+#id: int
++name: varchar
+}
+
+tag "0..*" -- "0..*" task : "lié par la table de jonction "task_tag""
+user "1" --> "0..*" task : posséde >
+task_tag "1" <-- "1" task
+task_tag "1" <-- "1" tag
+
+@enduml
