@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TaskController extends AbstractController
 {
@@ -24,6 +25,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/create', name: 'task_create', methods: ['GET', 'POST'])]
+    #[IsGranted('allUser')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $task = new Task();
@@ -68,6 +70,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('allUser')]
     public function edit(Task $task, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(TaskType::class, $task);
@@ -87,6 +90,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['POST'])]
+    #[IsGranted('allUser')]
     public function toggleTask(Task $task, EntityManagerInterface $em): Response
     {
         $task->toggle(!$task->isDone());

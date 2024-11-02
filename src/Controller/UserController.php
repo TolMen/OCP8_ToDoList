@@ -14,8 +14,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
+
     #[Route('/users', name: 'user_list', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('manage')]
     public function list(EntityManagerInterface $em): Response
     {
         $users = $em->getRepository(User::class)->findAll();
@@ -41,7 +42,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('manage')]
     public function edit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -57,7 +58,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/{id}/delete', name: 'user_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('manage')]
     public function delete(User $user, EntityManagerInterface $em): Response
     {
         $em->remove($user);
