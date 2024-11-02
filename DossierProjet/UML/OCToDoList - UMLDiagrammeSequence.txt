@@ -1,24 +1,27 @@
 
 @startuml
-actor Admins
-actor Utilisateur
-actor Anonyme
+actor Utilisateur_ROLE_ADMIN
+actor Utilisateur_ROLE_USER
+actor Utilisateur_NonInscrit
 
 note right ToDoList: Les groupes de couleurs indiquent \nles requêtes et leurs réponses
-note right Utilisateur: Un acteur possède les actions de tous les acteurs à sa droite \n\nExemple : L'action " Création d'une tâche " de l'Anonyme \net également possible pour l'Utilisateur et les admins
+note right Utilisateur_ROLE_USER : Un acteur possède les actions de tous les acteurs à sa droite \n\nExemple : Le privilége " Création d'une tâche " de l'Utilisateur_ROLE_USER \net également possible pour l'Utilisateur_ROLE_ADMIN
 
 group Inscription/Connexion
 
-Anonyme -[#30C5FF]> ToDoList : Inscription
+Utilisateur_NonInscrit -[#30C5FF]> ToDoList : Inscription
 ToDoList -[#30C5FF]> ToDoList : Vérifier les informations
-ToDoList --[#30C5FF]> Anonyme : Devient un Utilisateur ou un Admins
-note right #30C5FF: En cas de réussite, l'Anonyme devient un Utilisateur ou un Admins
-ToDoList --[#30C5FF]> Anonyme : Échec d'inscription
+ToDoList --[#30C5FF]> Utilisateur_NonInscrit : Obtiens le ROLE_USER ou ROLE_ADMIN
+note right #30C5FF: En cas de réussite, l'Utilisateur_NonInscrit posséde des priviléges de rôle
+ToDoList --[#30C5FF]> Utilisateur_NonInscrit : Échec d'inscription
 note right #30C5FF: En cas d'erreur sur les informations
 
-Utilisateur -[#227EA3]> ToDoList : Connexion
+Utilisateur_ROLE_USER -[#227EA3]> ToDoList : Connexion de l'utilisateur avec ses permissions de ROLE_USER
+Utilisateur_ROLE_ADMIN -[#227EA3]> ToDoList : Connexion de l'utilisateur avec ses permissions de ROLE_ADMIN
 ToDoList -[#227EA3]> ToDoList : Vérifier le mot de passe
-ToDoList --[#227EA3]> Utilisateur : Échec de connexion
+ToDoList --[#227EA3]> Utilisateur_ROLE_USER : Échec de connexion
+note right #227EA3: En cas d'erreur de connexion
+ToDoList --[#227EA3]> Utilisateur_ROLE_ADMIN : Échec de connexion
 note right #227EA3: En cas d'erreur de connexion
 
 end
@@ -26,10 +29,10 @@ end
 
 group Gestion des utilisateurs
 
-Admins -[#F96900]> ToDoList : Edition d'un utilisateur
-ToDoList --[#F96900]> ToDoList : Modifie les informations de l'utilisateur
+Utilisateur_ROLE_ADMIN -[#F96900]> ToDoList : Edition d'un utilisateur
+ToDoList --[#F96900]> ToDoList : Modifie les informations ou rôle de l'utilisateur
 
-Admins -[#D91850]> ToDoList : Suppression d'un utilisateur
+Utilisateur_ROLE_ADMIN -[#D91850]> ToDoList : Suppression d'un utilisateur
 ToDoList --[#D91850]> ToDoList : Supprime l'utilisateur
 note right #D91850: Efface les données de la BDD
 
@@ -38,16 +41,16 @@ end
 
 group Gestion des tâches
 
-Anonyme -[#4DAA57]> ToDoList : Rédaction d'une tâche
+Utilisateur_ROLE_USER -[#4DAA57]> ToDoList : Rédaction d'une tâche
 ToDoList --[#4DAA57]> ToDoList : Ajout de la tâche
 note right #4DAA57: Effectue l'ajout et le placement de la tâche
 
-Anonyme -[#FFF11C]> ToDoList : Modifie les éléments d'une tâche
+Utilisateur_ROLE_USER -[#FFF11C]> ToDoList : Modifie les éléments d'une tâche
 ToDoList --[#FFF11C]> ToDoList : Modification de la tâche
 note right #FFF11C: Effectue les modifications demandé
 
-Utilisateur -[#B0333E]> ToDoList : Supprime une de ses tâches
-Admins -[#B0333E]> ToDoList : Supprime une tâche "Auteur : Anonyme"
+Utilisateur_ROLE_USER -[#B0333E]> ToDoList : Supprime une de ses tâches
+Utilisateur_ROLE_ADMIN -[#B0333E]> ToDoList : Supprime une tâche "Auteur : Anonyme"
 ToDoList --[#B0333E]> ToDoList : Suppression de la tâche
 note right #B0333E: Efface les données de la BDD
 
