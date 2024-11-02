@@ -79,6 +79,23 @@ Pourquoi les modifier ?
 - Ajouter des éléments graphiques
 - Modifier le flux de navigation
 
+<br>
+
+### -- Security Voter Interface --
+
+Emplacement : src/Security/Voter/
+
+- AccessVoter.php : Contient la méthode qui vérifie si un utilisateur a accès à une fonction
+    -- allUser = ROLE_USER ou ROLE_ADMIN
+    -- manage = ROLE_ADMIN
+
+
+Pourquoi les modifier ?
+
+- Ajouter des votes pour contrôler plus d'actions
+- Ajouter des permissions
+
+<br>
 
 ## Fonctionnalités de l’application
 
