@@ -1,5 +1,7 @@
 # ToDoList
 
+> **Ce projet a été réalisé dans le cadre de mon apprentissage pour le parcours d'OpenClassrooms (Développeur d'application PHP/Symfony).**
+
 ToDoList is a simple task management app that lets you create, view and organize to-do lists. <br>
 It is a project designed to provide an intuitive interface for users who want to manage their daily tasks efficiently.
 
