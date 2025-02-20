@@ -1,50 +1,71 @@
-# ToDoList
+# 📋 ToDoList  
 
-> **Ce projet a été réalisé dans le cadre de mon apprentissage pour le parcours d'OpenClassrooms (Développeur d'application PHP/Symfony).**
+> **This project was created as part of my training in the OpenClassrooms curriculum (PHP/Symfony Application Developer).**  
+> --> *Version : [Français](README_fr.md)* 📖  
 
-ToDoList is a simple task management app that lets you create, view and organize to-do lists. <br>
-It is a project designed to provide an intuitive interface for users who want to manage their daily tasks efficiently.
+## 📖 Description  
 
-## Installation
+**ToDoList** is a simple task management app that allows users to create, view, and organize their to-do lists.  
+This project was designed to provide an intuitive interface for users who want to efficiently manage their daily tasks. 
 
-<p><strong>1 - Git clone the project</strong></p>
-<pre>
-    <code>https://github.com/TolMen/OCP8_ToDoList</code>
-</pre>
+![Aperçu du projet ToDoList](screenshot.jpg)
 
-<p><strong>2 - Install libraries</strong></p>
-<pre>
-    <code>symfony console composer install</code>
-</pre>
+## 🚀 Features  
 
-<p><strong>3 - Create database</strong></p>
+- **Task creation and management** : Easily add, edit, and delete your tasks.  
+- **Intuitive organization** : Sort tasks for better management.  
+- **Smooth user interface** : Designed for easy and quick use.  
+- **Structured database** : Secure storage for tasks.  
 
-- Update DATABASE_URL in the `.env` file with your database configuration:  
-  `DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name`
+## 🚧 Installation  
 
-- Create the database:  
-  `symfony console doctrine:database:create`
+### Prerequisites  
 
-- Create database structure:  
-  `symfony console doctrine:schema:update --force`
+Before starting, make sure you have the following installed on your machine :  
 
-- Insert sample data (optional):  
-  `symfony console doctrine:fixtures:load`
+- **PHP** (version 8.0 or higher)  
+- **Symfony** (version 7 or higher)  
+- **Composer**  
+- **MySQL Database**  
 
-## Documentation
+### Installation Steps  
 
-- [Contribution guidelines](https://github.com/TolMen/OCP8_ToDoList/blob/master/DossierProjet/CONTRIBUTING.md)
-- [Technical documentation](https://github.com/TolMen/OCP8_ToDoList/blob/master/DossierProjet/DocumentationTechnique.md)
-- [Project images](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/Design%20-%20Actuel)
-- [Reports](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/Rapport)
-- [UML](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/UML)
+1. **Clone the repository**  
+   Use Git to clone the project :  
+   ```sh
+   git clone https://github.com/TolMen/OCP8_ToDoList.git
+   ```
+2. **Install dependencies**  
+   Run the following command to install the required libraries :  
+   ```sh
+   symfony console composer install
+   ```
 
-## Author
+3. **Create the database**  
+   Update the `.env` file to configure your database :  
+   ```sh
+   DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
+   ```
+   Then, execute the following commands :  
+   ```sh
+   symfony console doctrine:database:create
+   symfony console doctrine:schema:update --force
+   symfony console doctrine:fixtures:load  # Optional: insert sample data
+   ```
 
-[TolMen](https://github.com/TolMen) - [LinkedIn](https://www.linkedin.com/in/jessyfrachisse/)
+## 📄 Documentation  
 
-## License
+- [Contribution guidelines](https://github.com/TolMen/OCP8_ToDoList/blob/master/DossierProjet/CONTRIBUTING.md)  
+- [Technical documentation](https://github.com/TolMen/OCP8_ToDoList/blob/master/DossierProjet/DocumentationTechnique.md)  
+- [Project images](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/Design%20-%20Actuel)  
+- [Reports](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/Rapport)  
+- [UML diagrams](https://github.com/TolMen/OCP8_ToDoList/tree/master/DossierProjet/UML)  
 
-This project is licensed under the MIT License. View the file [LICENSE](LICENSE) for more details.
+---
 
-Feel free to contact me with any questions or contributions. Enjoy exploring the project!
+Thank you for exploring this project.  
+Feel free to explore, modify, and improve it ! ✨  
+
+**For any questions or collaboration, feel free to contact me ! 📩**  
+
+[TolMen](https://github.com/TolMen) - [LinkedIn](https://www.linkedin.com/in/jessyfrachisse/)  
