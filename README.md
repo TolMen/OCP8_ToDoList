@@ -8,7 +8,7 @@
 **ToDoList** is a simple task management app that allows users to create, view, and organize their to-do lists.  
 This project was designed to provide an intuitive interface for users who want to efficiently manage their daily tasks. 
 
-![Aperçu du projet ToDoList](screenshot.jpg)
+![Project Preview - ToDoList](screenshot.jpg)
 
 ## 🚀 Features  
 
